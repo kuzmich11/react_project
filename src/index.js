@@ -2,15 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import Message from './Message';
 import reportWebVitals from './reportWebVitals';
-
-const myName = 'Vladimir'
 
 ReactDOM.render(
   <React.StrictMode>
-    <App name={myName} />
-     
+    <App />
   </React.StrictMode>,
   document.getElementById('root')
 );
