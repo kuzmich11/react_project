@@ -1,11 +1,10 @@
 import './App.scss';
 import React, {useEffect, useState} from 'react';
-import { TextField } from "@material-ui/core";
-import Button from '@mui/material/Button';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
+import {ThemeProvider, createTheme} from '@mui/material/styles';
+import MessageList from './components/MessageList';
+import InputForm from './components/InputForm';
+import ChatList from "./components/ChatList";
+import {Paper, Box, Grid} from '@mui/material'
 
 const theme = createTheme({
     palette: {
@@ -18,13 +17,6 @@ const theme = createTheme({
     },
 });
 
-const chatList = [
-    {name: 'Чат 1', id: 1},
-    {name: 'Чат 2', id: 2},
-    {name: 'Чат 3', id: 3},
-    {name: 'Чат 4', id: 4},
-    {name: 'Чат 5', id: 5},
-]
 const massageBot = [
     'Привет я Бот',
     'Затрудняюсь ответить. Может загуглим',
@@ -38,83 +30,74 @@ const massageBot = [
 function App() {
     const [messageList, setMessageList] = useState([])
     const [value, setValue] = useState('')
+    const [chatList, setChatList] = useState([
+        {name: 'Чат 1', id: 1},
+        {name: 'Чат 2', id: 2},
+        {name: 'Чат 3', id: 3},
+        {name: 'Чат 4', id: 4},
+        {name: 'Чат 5', id: 5},
+    ])
 
+    // const handleChange = (event) => {
+    //     setValue(event.target.value)
+    // }
 
-    const handleChange = (event) => {
-        setValue(event.target.value)
-    }
+    // const handleClick = (e) => {
+    //     e.preventDefault();
+    //     setMessageList([{author: 'me', text: value}, ...messageList])
+    //     setValue('')
+    // }
 
-    const handleClick = () => {
-        setMessageList([{author: 'me', text: value}, ...messageList])
-        setValue ('')
-    }
-
-    useEffect(() => {
-        let timer;
-        if (messageList.length > 0 && messageList[0].author === 'me'){
-            timer = setInterval(() => {
-                setMessageList([ {author: 'bot', text: massageBot[Math.floor(Math.random() * massageBot.length)] }, ...messageList ]
-                )}, 1500)
-        }
-        return () => {
-            clearTimeout(timer)
-        }
-    }, [messageList])
-
+    // useEffect(() => {
+    //     let timer;
+    //     if (messageList.length > 0 && messageList[0].author === 'me') {
+    //         timer = setInterval(() => {
+    //             setMessageList([{
+    //                     author: 'bot',
+    //                     text: massageBot[Math.floor(Math.random() * massageBot.length)]
+    //                 }, ...messageList]
+    //             )
+    //         }, 1500)
+    //     }
+    //     return () => {
+    //         clearTimeout(timer)
+    //     }
+    // }, [messageList])
 
     return (
-        <ThemeProvider theme={theme}>
-            <div className="container">
-                <List sx={{ width: '250px', backgroundColor: 'aquamarine', borderRadius: '20px', border: 'solid 1px #1976d2', height: '500px', padding: '20px'}}>
-                    {chatList.map((chat) =>(
-                        <ListItem key={chat.id}>
-                            <ListItemText
-                                primary={chat.name}
-                                secondary='Здесь будет описание чата'
-                            />
-                        </ListItem>)
-                    )}
-                </List>
-                <div className="dashboard">
-                    {messageList.map((message, index) =>
-                        (
-                            <div className={`message ${message.author === "me" ? "me" : "bot"}`} key={index}>
-                                <div>{message.author}</div>
-                                <div className={`message__${message.author === "me" ? "me" : "bot"}`}>{message.text}</div>
-                            </div>
-                        )
-                    )}
-                </div>
-                <div> </div>
-                <form className="form" action='#'>
-                    <TextField
-                        style={{ margin: '15px', width: '300px', height: '60px' }}
-                        id="outlined-basic"
-                        label="Outlined"
-                        variant="outlined"
-                        value={value}
-                        onChange={handleChange}
-                        autoFocus
-                        inputRef={input => input && input.focus()}
+        <Grid container spacing={2}>
 
-                    />
-                    <Button
-                        style={{ margin: '15px 0', width: '150px', height: '56px' }}
-                        variant="contained"
-                        size="large"
-                        onClick={handleClick}>
-                        Отправить
-                    </Button>
-                    {/*<input className="form__input" onChange={handleChange} value={value} />*/}
-                    {/*<button className="form__button" onClick={handleClick}>Отправить</button>*/}
-                </form>
-            </div>
-        </ThemeProvider>
-
+            <Grid item xs={12}>
+                <ThemeProvider theme={theme}>
+                    <Box
+                        sx={{
+                            p: 1,
+                            backgroundColor: 'background.default',
+                            display: 'grid',
+                            gridTemplateColumns: '1fr 2fr',
+                        }}
+                    >
+                        <Paper variant="outlined">
+                            <ChatList chatList={chatList}/>
+                        </Paper>
+                        <Paper variant="outlined">
+                            <MessageList messageList={messageList}/>
+                        </Paper>
+                        <Paper variant="outlined">
+                            <InputForm onChange={handleChange} onClick={handleClick} value={value}/>
+                        </Paper>
+                    </Box>
+                </ThemeProvider>
+            </Grid>
+        </Grid>
 
     )
 }
 
-// 5. * Добавить тему material-ui.
+// 1. Установить react-router-dom. Добавить домашнюю страницу по адресу “/” со списком ссылок на страницу чатов и страницу профиля.
+// 2. Добавить страницу профиля (пока не несет никакой функциональности, можно сделать ее пустой).
+// 3. Настроить разделение приложения на чаты с помощью роутера (использовать параметры url).
+// Приложение должно корректно работать, если пользователь вводит идентификатор несуществующего чата или если идентификатора чата нет (т.е. адрес “/chats/”).
+// 4. * Добавить возможность удаления и добавления чатов.
 
 export default App;
