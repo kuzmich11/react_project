@@ -1,6 +1,6 @@
-const EXAMPLE_ACTION = "EXAMPLE_ACTION";
+export const CHANGE_NAME = "PROFILE::CHANGE_NAME";
 
-export const toggleShowName = {
-    type: EXAMPLE_ACTION
-}
-
+export const changeName = (newName) => ({
+    type: CHANGE_NAME,
+    payload: newName,
+})

@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+
 import {Routes, Route, Link} from "react-router-dom";
 import "../App.scss";
 import Home from './Home';
@@ -24,25 +24,10 @@ const theme = createTheme({
     },
 });
 
-const initialChats = {
-    id1: {
-        name: 'Чат 1',
-        messages: [{
-            text: 'Привет, я бот чата 1',
-            author: 'Bot',
-        }]
-    },
-    id2: {
-        name: 'Чат 2',
-        messages: [{
-            text: 'Привет, я бот чата 2',
-            author: 'Bot2',
-        }]
-    }
-}
+
 
 function Routers() {
-    const [chatList, setChatList] = useState(initialChats)
+
 
     return (
         <Provider store={store}>
@@ -71,8 +56,8 @@ function Routers() {
                     <Routes>
                         <Route path="/" element={<Home/>}/>
                         <Route path="/profile" element={<Profile/>}/>
-                        <Route path="/chats" element={<Chats chats={chatList}/>}/>
-                        <Route path="/chats/:chatId" element={<ChatId chats={chatList}/>}/>
+                        <Route path="/chats" element={<Chats />}/>
+                        <Route path="/chats/:chatId" element={<ChatId />}/>
                         <Route path="*" element={<NoChat/>}/>
                     </Routes>
                 </div>
