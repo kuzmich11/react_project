@@ -8,6 +8,9 @@ import {Button, ButtonGroup} from '@mui/material';
 import {ThemeProvider, createTheme} from '@mui/material/styles';
 import Chats from "./Chats";
 import NoChat from "./NoChat";
+import {Provider} from "react-redux";
+import {store} from "../store";
+
 
 
 const theme = createTheme({
@@ -42,39 +45,40 @@ function Routers() {
     const [chatList, setChatList] = useState(initialChats)
 
     return (
-        <ThemeProvider theme={theme}>
+        <Provider store={store}>
+            <ThemeProvider theme={theme}>
+                <ButtonGroup sx={{
+                    p: 1,
+                    m: 2,
+                    backgroundColor: 'background.default',
+                    display: 'grid',
+                    gridTemplateColumns: '1fr 1fr 1fr',
+                    justifyItems: 'center',
+                }}
+                             size="large" variant="contained" aria-label="large button group">
+                    <Link to='/'>
+                        <Button>Home</Button>
+                    </Link>
+                    <Link to='chats'>
+                        <Button>Chats</Button>
+                    </Link>
+                    <Link to='profile'>
+                        <Button>Profile</Button>
+                    </Link>
+                </ButtonGroup>
 
-            <ButtonGroup sx={{
-                p: 1,
-                m: 2,
-                backgroundColor: 'background.default',
-                display: 'grid',
-                gridTemplateColumns: '1fr 1fr 1fr',
-                justifyItems: 'center',
-            }}
-                         size="large" variant="contained" aria-label="large button group">
-                <Link to='/'>
-                    <Button>Home</Button>
-                </Link>
-                <Link to='chats'>
-                    <Button>Chats</Button>
-                </Link>
-                <Link to='profile'>
-                    <Button>Profile</Button>
-                </Link>
-            </ButtonGroup>
+                <div>
+                    <Routes>
+                        <Route path="/" element={<Home/>}/>
+                        <Route path="/profile" element={<Profile/>}/>
+                        <Route path="/chats" element={<Chats chats={chatList}/>}/>
+                        <Route path="/chats/:chatId" element={<ChatId chats={chatList}/>}/>
+                        <Route path="*" element={<NoChat/>}/>
+                    </Routes>
+                </div>
 
-            <div>
-                <Routes>
-                    <Route path="/" element={<Home/>}/>
-                    <Route path="/profile" element={<Profile/>}/>
-                    <Route path="/chats" element={<Chats chats={chatList}/>}/>
-                    <Route path="/chats/:chatId" element={<ChatId chats={chatList}/>}/>
-                    <Route path="*" element={<NoChat/>}/>
-                </Routes>
-            </div>
-
-        </ThemeProvider>
+            </ThemeProvider>
+        </Provider>
     );
 }
 

@@ -6,6 +6,8 @@ import NoChat from "./NoChat";
 import {Box, Grid} from "@mui/material";
 import React, {useEffect, useState} from "react";
 import InputForm from "../components/InputForm";
+// import {useDispatch, useSelector} from "react-redux";
+// import {addMessages} from "../store/chats/chatsActions";
 
 const massageBot = [
     'Привет я Бот',
@@ -19,6 +21,12 @@ const massageBot = [
 
 const ChatId = ({chats}) => {
     let {chatId} = useParams()
+    // const { messages } = useSelector(chats => chats)
+    // const dispatch = useDispatch();
+    // const setMessages = useCallback(() => {
+    //     dispatch(addMessages);
+    //
+    // }, [dispatch])
 
     const [messageList, setMessageList] = useState(chats[chatId].messages)
     const [value, setValue] = useState('')
