@@ -1,10 +1,29 @@
 import '../App.scss';
-import React from "react";
+import React, {useCallback} from "react";
 import {Box, Paper} from "@mui/material";
+import {shallowEqual, useSelector} from "react-redux";
+import {useParams} from "react-router-dom";
+import {getMessageList} from "../store/messages/selectors";
 
-const MessageList = ({messageList}) => {
+const MessageList = () => {
+    const messages = useSelector(getMessageList, shallowEqual)
+
+    let {chatId} = useParams();
+    const getMessagesById = messages[chatId];
+
+    const renderMessage = useCallback((message, index) => {
+        return (
+            <div className={`message ${message.author !== "bot" ? "me" : "bot"}`} key={index}>
+                <div>{message.author}</div>
+                <div className={`message__${message.author !== "bot" ? "me" : "bot"}`}>
+                    {message.text}
+                </div>
+            </div>)
+    }, [])
+
+
     return (
-            <Box sx={{
+        <Box sx={{
 
             backgroundColor: 'background.paper',
             m: 1,
@@ -15,16 +34,7 @@ const MessageList = ({messageList}) => {
         }}>
             <Paper elevation={3}>
                 <div className='dashboard'>
-                    {messageList.map((message, index) =>
-                        (
-                            <div className={`message ${message.author === "me" ? "me" : "bot"}`} key={index}>
-                                <div>{message.author}</div>
-                                <div className={`message__${message.author === "me" ? "me" : "bot"}`}>
-                                    {message.text}
-                                </div>
-                            </div>
-                        )
-                    )}
+                    {getMessagesById?.map((message, index) => renderMessage(message, index))}
                 </div>
 
             </Paper>
