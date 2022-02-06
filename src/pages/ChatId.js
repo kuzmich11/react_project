@@ -1,28 +1,32 @@
 import '../App.scss';
 import MessageList from "../components/MessageList";
 import ChatList from "../components/ChatList";
-import {Box, Grid} from "@mui/material";
-import InputForm from "../components/InputForm";
+import {Box, Paper} from "@mui/material";
+import InputMessages from "../components/InputMessages";
+import InputChatName from "../components/InputChatName";
+import React from "react";
 
 const ChatId = () => {
-
     return (
-        <Grid>
-            <Box
-                sx={{
-                    m: 1,
-                    backgroundColor: 'background.default',
-                    display: 'grid',
-                    gridTemplateColumns: '1fr 2fr',
-                }}
-            >
-                <ChatList />
+        <Box
+            sx={{
+                m: 2,
+                display: 'grid',
+                gridTemplateColumns: '1fr 2fr',
+                gridColumnGap: '10px',
+            }}
+        >
+            <Paper elevation={3}>
+                <ChatList/>
+                <InputChatName/>
+            </Paper>
+            <Paper elevation={3}>
                 <div>
-                    <MessageList />
-                    <InputForm />
+                    <MessageList/>
+                    <InputMessages/>
                 </div>
-            </Box>
-        </Grid>
+            </Paper>
+        </Box>
     )
 }
 

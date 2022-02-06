@@ -1,6 +1,6 @@
 import '../App.scss';
 import React, {useCallback} from "react";
-import {Box, Paper} from "@mui/material";
+import {Box} from "@mui/material";
 import {shallowEqual, useSelector} from "react-redux";
 import {useParams} from "react-router-dom";
 import {getMessageList} from "../store/messages/selectors";
@@ -21,10 +21,8 @@ const MessageList = () => {
             </div>)
     }, [])
 
-
     return (
         <Box sx={{
-
             backgroundColor: 'background.paper',
             m: 1,
             '& > :not(style)': {
@@ -32,12 +30,9 @@ const MessageList = () => {
                 height: 500,
             },
         }}>
-            <Paper elevation={3}>
-                <div className='dashboard'>
-                    {getMessagesById?.map((message, index) => renderMessage(message, index))}
-                </div>
-
-            </Paper>
+            <div className='dashboard'>
+                {getMessagesById?.map((message, index) => renderMessage(message, index))}
+            </div>
         </Box>
     )
 }
