@@ -1,4 +1,6 @@
 import {ADD_MESSAGE, addMessage} from "./messages/actions";
+import {API_URL_PUBLIC} from "./constants";
+import {getGistsFailure, getGistsRequest, getGistsSuccess} from "./gists/actions";
 
 const messageBot = [
     'Привет я Бот',
@@ -21,3 +23,18 @@ const middleware = store => next => (action) => {
 }
 
 export default middleware;
+
+export const getAllGists = () => async (dispatch) => {
+    dispatch(getGistsRequest())
+    try {
+        const response = await fetch(API_URL_PUBLIC);
+
+        if (!response.ok) {
+            throw new Error(`Request failed with status ${response.status}`)
+        }
+        const result = await response.json();
+        dispatch(getGistsSuccess(result));
+    } catch (error) {
+        dispatch(getGistsFailure(error.message))
+    }
+}

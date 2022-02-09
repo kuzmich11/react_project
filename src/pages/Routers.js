@@ -9,6 +9,7 @@ import Chats from "./Chats";
 import NoChat from "./NoChat";
 import {Provider} from "react-redux";
 import {store} from "../store";
+import Gists from "./Gists";
 
 const theme = createTheme({
     palette: {
@@ -30,7 +31,7 @@ function Routers() {
                     m: 2,
                     backgroundColor: 'background.default',
                     display: 'grid',
-                    gridTemplateColumns: '1fr 1fr 1fr',
+                    gridTemplateColumns: '1fr 1fr 1fr 1fr',
                     justifyItems: 'center',
                 }}
                              size="large" variant="contained" aria-label="large button group">
@@ -43,6 +44,9 @@ function Routers() {
                     <Link to='profile'>
                         <Button>Profile</Button>
                     </Link>
+                    <Link to='gists'>
+                        <Button>Gists</Button>
+                    </Link>
                 </ButtonGroup>
                 <div>
                     <Routes>
@@ -50,6 +54,7 @@ function Routers() {
                         <Route path="/profile" element={<Profile/>}/>
                         <Route path="/chats" element={<Chats />}/>
                         <Route path="/chats/:chatId" element={<ChatId />}/>
+                        <Route path="/gists" element = {<Gists/>} />
                         <Route path="*" element={<NoChat/>}/>
                     </Routes>
                 </div>
