@@ -1,5 +1,5 @@
 import '../App.scss';
-import InputProfileName from "../components/inputProfileName";
+import InputProfileName from "../components/InputProfileName";
 
 const Profile = () => {
 
