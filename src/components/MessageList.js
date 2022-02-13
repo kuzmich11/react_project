@@ -1,15 +1,27 @@
 import '../App.scss';
-import React, {useCallback} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import {Box} from "@mui/material";
-import {shallowEqual, useSelector} from "react-redux";
 import {useParams} from "react-router-dom";
-import {getMessageList} from "../store/messages/selectors";
+import {child, get, getDatabase, ref} from "firebase/database";
+import firebase from "../service/firebase";
 
 const MessageList = () => {
-    const messages = useSelector(getMessageList, shallowEqual)
+    const [messages, setMessages] = useState([]);
 
     let {chatId} = useParams();
-    const getMessagesById = messages[chatId];
+
+    useEffect(()=>{
+        const database = getDatabase(firebase);
+        const databaseRef = ref(database);
+        get(child(databaseRef, `/messages/${chatId}`)).then((snapshot)=>{
+            if (snapshot.exists()){
+                const msg = Object.values(snapshot.val());
+                setMessages(msg)
+            } else {
+                console.log('no data')
+            }
+        })
+    },[chatId])
 
     const renderMessage = useCallback((message, index) => {
         return (
@@ -31,7 +43,7 @@ const MessageList = () => {
             },
         }}>
             <div className='dashboard'>
-                {getMessagesById?.map((message, index) => renderMessage(message, index))}
+                {messages?.map((message, index) => renderMessage(message, index))}
             </div>
         </Box>
     )

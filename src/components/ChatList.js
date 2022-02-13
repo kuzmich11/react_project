@@ -9,11 +9,27 @@ import {
 } from "@mui/material";
 import AdbIcon from '@mui/icons-material/Adb';
 import {Link} from 'react-router-dom';
-import {shallowEqual, useSelector} from "react-redux";
-import {getChatList} from "../store/chats/selectors";
+import {useEffect, useState} from "react";
+import {child, get, getDatabase, ref} from "firebase/database";
+import firebase from "../service/firebase";
 
 const ChatList = () => {
-    const chats = useSelector(getChatList, shallowEqual);
+    const [chats, setChats] = useState([]);
+    useEffect(()=>{
+        const database = getDatabase(firebase);
+        const databaseRef = ref(database);
+        get(child(databaseRef, '/chats')).then((snapshot)=>{
+            if (snapshot.exists()){
+                const obj = snapshot.val();
+                const chatsId = Object.keys(obj);
+                const chatArr = chatsId.map((item)=> ({id: item, name: obj[item].name}))
+                setChats(chatArr)
+            } else {
+                console.log('no data')
+            }
+        })
+    },[])
+
     return (
         <>
             <Box sx={{
