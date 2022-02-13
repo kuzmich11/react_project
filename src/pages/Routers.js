@@ -1,4 +1,3 @@
-
 import {Routes, Route, Link} from "react-router-dom";
 import "../App.scss";
 import Home from './Home';
@@ -11,8 +10,6 @@ import NoChat from "./NoChat";
 import {Provider} from "react-redux";
 import {store} from "../store";
 
-
-
 const theme = createTheme({
     palette: {
         primary: {
@@ -24,11 +21,7 @@ const theme = createTheme({
     },
 });
 
-
-
 function Routers() {
-
-
     return (
         <Provider store={store}>
             <ThemeProvider theme={theme}>
@@ -51,7 +44,6 @@ function Routers() {
                         <Button>Profile</Button>
                     </Link>
                 </ButtonGroup>
-
                 <div>
                     <Routes>
                         <Route path="/" element={<Home/>}/>
@@ -61,7 +53,6 @@ function Routers() {
                         <Route path="*" element={<NoChat/>}/>
                     </Routes>
                 </div>
-
             </ThemeProvider>
         </Provider>
     );

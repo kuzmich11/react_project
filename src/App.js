@@ -2,7 +2,7 @@ import './App.scss';
 import React, {useEffect, useState} from 'react';
 import {ThemeProvider, createTheme} from '@mui/material/styles';
 import MessageList from './components/MessageList';
-import InputForm from './components/InputForm';
+import InputMessages from './components/InputMessages';
 import ChatList from "./components/ChatList";
 import {Paper, Box, Grid} from '@mui/material'
 
@@ -84,7 +84,7 @@ function App() {
                             <MessageList messageList={messageList}/>
                         </Paper>
                         <Paper variant="outlined">
-                            <InputForm onChange={handleChange} onClick={handleClick} value={value}/>
+                            <InputMessages onChange={handleChange} onClick={handleClick} value={value}/>
                         </Paper>
                     </Box>
                 </ThemeProvider>

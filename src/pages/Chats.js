@@ -1,22 +1,24 @@
 import React from "react";
 import ChatList from "../components/ChatList";
-import {useParams} from "react-router-dom";
-import {Box, Grid} from "@mui/material";
+import {Box, Grid, Paper} from "@mui/material";
+import InputChatName from "../components/InputChatName";
 
-const Chats = ({chats}) => {
-    const {chatId} = useParams()
-    return(
-
+const Chats = () => {
+    return (
         <Grid>
             <Box
                 sx={{
-                    m: 1,
+                    m: 2,
                     backgroundColor: 'background.default',
                     display: 'grid',
                     gridTemplateColumns: '1fr 2fr',
                 }}
             >
-            <ChatList chats={chats} chatId={chatId}/>
+                <Paper elevation={3}>
+                    <ChatList/>
+                    <InputChatName/>
+                </Paper>
+
             </Box>
         </Grid>
     )
