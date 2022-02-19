@@ -5,6 +5,7 @@ import reportWebVitals from './reportWebVitals';
 import {BrowserRouter} from "react-router-dom";
 import Routers from "./pages/Routers";
 import {AuthProvider} from "./hook/useAuth";
+// import ForTest from './ForTest';
 
 ReactDOM.render(
     <BrowserRouter>
@@ -12,6 +13,7 @@ ReactDOM.render(
             <Routers/>
         </AuthProvider>
     </BrowserRouter>,
+    // <ForTest/>,
     document.getElementById('root')
 );
 

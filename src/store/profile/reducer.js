@@ -1,7 +1,6 @@
 import {CHANGE_NAME} from "./actions";
 
 const initialState = {
-    showName: false,
     name: 'Vladimir'
 }
 

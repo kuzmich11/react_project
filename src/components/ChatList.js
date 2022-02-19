@@ -1,34 +1,18 @@
 import '../App.scss';
-import {
-    List,
-    ListItem,
-    ListItemText,
-    ListItemButton,
-    ListItemIcon,
-    Box,
-} from "@mui/material";
+import { List, ListItem, ListItemText, ListItemButton, ListItemIcon, Box, } from "@mui/material";
 import AdbIcon from '@mui/icons-material/Adb';
 import {Link} from 'react-router-dom';
-import {useEffect, useState} from "react";
-import {child, get, getDatabase, ref} from "firebase/database";
-import firebase from "../service/firebase";
+import {useEffect} from "react";
+import { useDispatch, useSelector } from 'react-redux';
+import { initTrackerWithFB } from '../store/middleware';
 
 const ChatList = () => {
-    const [chats, setChats] = useState([]);
-    useEffect(()=>{
-        const database = getDatabase(firebase);
-        const databaseRef = ref(database);
-        get(child(databaseRef, '/chats')).then((snapshot)=>{
-            if (snapshot.exists()){
-                const obj = snapshot.val();
-                const chatsId = Object.keys(obj);
-                const chatArr = chatsId.map((item)=> ({id: item, name: obj[item].name}))
-                setChats(chatArr)
-            } else {
-                console.log('no data')
-            }
-        })
-    },[])
+    const chats = useSelector(state => state.chats.chatList);
+    const dispatch = useDispatch();
+    
+    useEffect(() => {
+        dispatch(initTrackerWithFB())
+    }, [dispatch])
 
     return (
         <>
