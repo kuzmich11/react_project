@@ -10,6 +10,10 @@ import NoChat from "./NoChat";
 import {Provider} from "react-redux";
 import {store} from "../store";
 import Gists from "./Gists";
+import Login from "./Login";
+import SignUp from "./SignUp";
+import RequiredAuth from "../hocs/RequiredAuth";
+import useAuth from "../hook/useAuth";
 
 const theme = createTheme({
     palette: {
@@ -22,7 +26,9 @@ const theme = createTheme({
     },
 });
 
-function Routers() {
+const Routers = () => {
+    const auth = useAuth();
+
     return (
         <Provider store={store}>
             <ThemeProvider theme={theme}>
@@ -31,7 +37,7 @@ function Routers() {
                     m: 2,
                     backgroundColor: 'background.default',
                     display: 'grid',
-                    gridTemplateColumns: '1fr 1fr 1fr 1fr',
+                    gridTemplateColumns: '1fr 1fr 1fr 1fr 1fr 1fr 1fr',
                     justifyItems: 'center',
                 }}
                              size="large" variant="contained" aria-label="large button group">
@@ -47,15 +53,29 @@ function Routers() {
                     <Link to='gists'>
                         <Button>Gists</Button>
                     </Link>
+                    <Link to='signup'>
+                        <Button>Sign Up</Button>
+                    </Link>
+                    <Link to='login'>
+                        <Button>Login</Button>
+                    </Link>
+                    <Button onClick={() => auth.signout(() => {
+
+                    })}>Sign Out</Button>
+
                 </ButtonGroup>
                 <div>
                     <Routes>
                         <Route path="/" element={<Home/>}/>
-                        <Route path="/profile" element={<Profile/>}/>
-                        <Route path="/chats" element={<Chats />}/>
-                        <Route path="/chats/:chatId" element={<ChatId />}/>
-                        <Route path="/gists" element = {<Gists/>} />
+                        <Route path="/signup" element={<SignUp/>}/>
+                        <Route path="/login" element={<Login/>}/>
                         <Route path="*" element={<NoChat/>}/>
+                        <Route element={<RequiredAuth/>}>
+                            <Route path="/profile" element={<Profile/>}/>
+                            <Route path="/chats" element={<Chats/>}/>
+                            <Route path="/chats/:chatId" element={<ChatId/>}/>
+                            <Route path="/gists" element={<Gists/>}/>
+                        </Route>
                     </Routes>
                 </div>
             </ThemeProvider>

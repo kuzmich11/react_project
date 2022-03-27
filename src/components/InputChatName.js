@@ -1,19 +1,25 @@
 import {Box, Button, Dialog, DialogTitle, TextField} from "@mui/material";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {useDispatch} from "react-redux";
 import {addChat} from "../store/chats/actions";
+import {getDatabase, ref, push, set, get, child} from 'firebase/database'
+import firebase from "../service/firebase";
 
 const InputChatName = () => {
     const [visible, setVisible] = useState(false);
     const [newChatName, setNewChatName] = useState("");
 
-    const dispatch = useDispatch();
-
     const handleClose = () => setVisible(false);
     const handleOpen = () => setVisible(true);
     const handleChange = (e) => setNewChatName(e.target.value);
     const onAddChat = () => {
-        dispatch(addChat(newChatName));
+        const database = getDatabase(firebase);
+        const chatRef = ref(database, '/chats');
+        const newChatRef = push(chatRef);
+        set(newChatRef, {name: newChatName}).then((res) => {
+            console.log(res)
+        })
+
         setNewChatName("");
         handleClose();
     };
@@ -41,7 +47,6 @@ const InputChatName = () => {
                 </Dialog>
             </Box>
         </>
-
     )
 };
 
