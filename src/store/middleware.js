@@ -1,28 +1,9 @@
-import {ADD_MESSAGE, addMessage} from "./messages/actions";
+import { updateMessages } from "./messages/actions";
+import {chatListUpdate} from './chats/actions'
 import {API_URL_PUBLIC} from "./constants";
-import {getGistsFailure, getGistsRequest, getGistsSuccess} from "./gists/actions";
-
-const messageBot = [
-    'Привет я Бот',
-    'Затрудняюсь ответить. Может загуглим',
-    'Не хочу с тобой говорить',
-    'Давай поболтаем',
-    'Моя твоя не понимать',
-    'Я от тебя устал',
-    'Специально длинный текст, чтобы проверить как переносятся слова в сообщении'
-]
-
-const middleware = store => next => (action) => {
-    if (action.type === ADD_MESSAGE && action.message.author !== 'bot')
-    {
-        const botMessage = {text: messageBot[Math.floor(Math.random() * messageBot.length)], author: 'bot'};
-        setTimeout(() => store.dispatch(addMessage(action.chatId, botMessage)), 2000);
-    }
-
-    return next(action)
-}
-
-export default middleware;
+import { getGistsFailure, getGistsRequest, getGistsSuccess } from "./gists/actions";
+import firebase from '../service/firebase';
+import { getDatabase, ref, set, push, onValue } from 'firebase/database';
 
 export const getAllGists = () => async (dispatch) => {
     dispatch(getGistsRequest())
@@ -38,3 +19,43 @@ export const getAllGists = () => async (dispatch) => {
         dispatch(getGistsFailure(error.message))
     }
 }
+
+export const addChatWithFB = (name) => async () => {
+    const db = getDatabase(firebase);
+    const chatRef = ref(db, '/chats');
+    const newChatRef = push(chatRef);
+    set(newChatRef, { name: name }).then((res) => {
+        console.log(res)
+    })
+}
+
+export const initTrackerWithFB = () => async (dispatch) => {
+    const db = getDatabase(firebase);
+    const chatRef = ref(db, '/chats');
+    onValue(chatRef, (snapshot) => {
+        const data = snapshot.val();
+        const chatIds = Object.keys(data);
+        const chatArr = chatIds.map(item => ({ id: item, name: data[item].name }));
+        dispatch(chatListUpdate(chatArr))
+    })
+}
+
+export const getMessagesByChatIdWithFB = (chatId) => async (dispatch) => {
+    const db = getDatabase(firebase);
+    const msgRef = ref(db, `/messages/${chatId}`);
+    onValue(msgRef, (snapshot) => {
+        const data = snapshot.val();
+        const msg = Object.values(data);
+        if (msg.length > 0) {
+            dispatch(updateMessages(chatId, msg));
+        }
+    })
+}
+
+export const addMessageWithFB = (chatId, message) => async () => {
+     const db = getDatabase(firebase);
+     const messageRef = ref(db, `/messages/${chatId}`);
+     const newMessageRef = push(messageRef);
+     set(newMessageRef, message).then((res) => console.log(res))
+}
+

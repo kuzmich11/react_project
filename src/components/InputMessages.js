@@ -1,46 +1,31 @@
 import '../App.scss';
-import React, {useCallback, useState} from 'react';
-import {shallowEqual, useSelector} from "react-redux";
-
-import {useParams} from "react-router-dom";
-import {getProfileName} from "../store/profile/selectors";
-import {Box, Button, TextField} from "@mui/material";
-import {getDatabase, ref, push, set} from "firebase/database";
-import firebase from "../service/firebase";
+import React, { useCallback, useState } from 'react';
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import { getProfileName } from "../store/profile/selectors";
+import { Box, Button, TextField } from "@mui/material";
+import { addMessageWithFB } from '../store/middleware';
 
 function InputMessages() {
     const [value, setValue] = useState('');
 
     const profileName = useSelector(getProfileName, shallowEqual);
-    const {chatId} = useParams();
-
-    // const dispatch = useDispatch();
-
+    const { chatId } = useParams();
+    
+    const dispatch = useDispatch();
+    
     const handleChange = useCallback((event) => {
         setValue(event.target.value)
     }, [])
 
-    // const onAddMessage = useCallback((message, author) => {
-    //     // dispatch(addMessage(chatId, {
-    //     //     text: message,
-    //     //     author: author
-    //     // }));
-    //     setValue('');
-    // }, [chatId])
-
     const handleButton = useCallback( () => {
-        // onAddMessage(value, profileName);
         const message = {
             text: value,
             author: profileName
         }
-
-        const database = getDatabase(firebase);
-        const messageRef = ref(database, `/messages/${chatId}`);
-        const newMessageRef = push(messageRef);
-        set(newMessageRef, message).then((res) => console.log(res))
+        dispatch(addMessageWithFB(chatId, message))
         setValue('');
-    },[profileName, chatId, value])
+    },[dispatch, profileName, chatId, value])
 
     return (
         <>

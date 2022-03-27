@@ -1,27 +1,18 @@
 import '../App.scss';
-import React, {useCallback, useEffect, useState} from "react";
-import {Box} from "@mui/material";
-import {useParams} from "react-router-dom";
-import {child, get, getDatabase, ref} from "firebase/database";
-import firebase from "../service/firebase";
+import React, { useCallback, useEffect } from "react";
+import { Box } from "@mui/material";
+import { useParams } from "react-router-dom";
+import { useDispatch, useSelector } from 'react-redux';
+import { getMessagesByChatIdWithFB } from '../store/middleware';
 
 const MessageList = () => {
-    const [messages, setMessages] = useState([]);
-
+    const messages = useSelector(state => state.messages.messageList);
+    const dispatch = useDispatch();
     let {chatId} = useParams();
 
-    useEffect(()=>{
-        const database = getDatabase(firebase);
-        const databaseRef = ref(database);
-        get(child(databaseRef, `/messages/${chatId}`)).then((snapshot)=>{
-            if (snapshot.exists()){
-                const msg = Object.values(snapshot.val());
-                setMessages(msg)
-            } else {
-                console.log('no data')
-            }
-        })
-    },[chatId])
+    useEffect(() => {
+        dispatch(getMessagesByChatIdWithFB(chatId))
+    }, [dispatch, chatId])
 
     const renderMessage = useCallback((message, index) => {
         return (
@@ -43,7 +34,7 @@ const MessageList = () => {
             },
         }}>
             <div className='dashboard'>
-                {messages?.map((message, index) => renderMessage(message, index))}
+                {messages[chatId]?.reverse().map((message, index) => renderMessage(message, index))}
             </div>
         </Box>
     )
